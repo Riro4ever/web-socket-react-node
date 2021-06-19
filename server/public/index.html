@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket sample</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="nameselectcontainer">
+        <label for="name">Nome</label>
+        <input id="name" name="name" placeholder="Digite seu nome">
+        <button id="join">Entrar no chat</button>
+    </div>
+    
+    <br>
+    <div id="messagecontainer" style="display: none;">
+        <div id="messageshow" style="width: 300px; height: 300px;background-color: #ccc; overflow-y: scroll;overflow-x: hidden;"></div>
+        <input id="messageinput" name="messagebox">
+        <button id="send-message">Send Message</button>
+    </div>
+    
+    
+
+    <script type="text/javascript">
+        let socket;
+        let name = '';
+        let messageinput = document.getElementById("messageinput");
+        let messageshow = document.getElementById("messageshow");
+        let messagecontainer = document.getElementById("messagecontainer");
+        let nameselectcontainer = document.getElementById("nameselectcontainer");
+        document.getElementById("join").addEventListener('click', function(){
+            if(!socket){
+                socket = new io("http://localhost:4444");
+                messagecontainer.style.display = "block";
+                nameselectcontainer.style.display = "none";
+            }
+            name = document.getElementById("name").value;
+
+            socket.on('received', message => {
+                let elemento = document.createElement("template");
+                html = `<p><strong>${message.name} - </strong> ${message.content}</p>`.trim();
+                elemento.innerHTML = html;
+
+                messageshow.append(elemento.content.firstChild);
+            })
+
+        })
+
+        document.getElementById("send-message").addEventListener('click', function(){
+            if(!socket){
+                return;
+            }
+
+            let message = {"name":name, "content":messageinput.value};
+            socket.emit('message', message);
+        })
+
+    </script>
+
+</body>
+</html>
