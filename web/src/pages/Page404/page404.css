@@ -1,0 +1,10 @@
+.div404 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    color: #fff;
+}
+.div404 h1 {
+    position: relative;
+    left: -50%;
+}

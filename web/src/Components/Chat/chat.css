@@ -1,12 +1,13 @@
 
 .messageShow {
-    width: 300px;
-    height: 300px;
-    background-color: #ccc;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  
-  .messageContainer {
-    display: none;
-  }
+  width: 275px;
+  height: 300px;
+  margin: auto;
+  background-color: #ccc;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-top: 50px;
+  margin-bottom: 5px;
+  padding: 10px;
+  text-align: left;
+}

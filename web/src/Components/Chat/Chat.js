@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './chat.css';
 import socketIOClient from "socket.io-client";
+import { withRouter } from "react-router";
 
 function Chat(props) {
   const [name, setName] = React.useState('');
-  const [messageInput, setMessageInput] = React.useState('');  
   let socket = null;
+
+  useEffect(() => {
+    const userLogin = localStorage.getItem('@socket:userLogin');
+    if (!userLogin) {
+      props.history.push('/login');
+    } else {
+      setName(userLogin);
+      handleJoinChat();
+    }
+    return () => {
+      socket.disconnect(); 
+    }
+  },[]);
+
+  
   const handleJoinChat = () => {
-    const messagecontainer = document.getElementById("messagecontainer");
-    const nameselectcontainer = document.getElementById("nameselectcontainer");
     const messageshow = document.getElementById("messageShow");
 
     if(!socket){
       socket = new socketIOClient.io("http://localhost:4444");
-      messagecontainer.style.display = "block";
-      nameselectcontainer.style.display = "none";
     }
 
     socket.on('received', message => {
@@ -27,39 +38,24 @@ function Chat(props) {
   }
 
   const handleSendMessage = () => {
+    const messageinput = document.getElementById("messageinput").value; 
     if(!socket){
       socket = new socketIOClient.io("http://localhost:4444");
     }
 
-    let message = {"name":name, "content":messageInput};
+    let message = {"name":name, "content":messageinput};
     socket.emit('message', message);
   }
 
-  function handleNameChange(evt) {
-    setName(evt.target.value);
-  }
-  function handleMessageChange(evt) {
-    setMessageInput(evt.target.value);
-  }
-
   return (
-      <div>
-          <div id="nameselectcontainer">
-            <label>
-                Nome &nbsp;
-                <input id="name" autoFocus onChange={handleNameChange} name="name" placeholder="Digite seu nome" value={name}></input>
-            </label>
-            
-            <button id="join" onClick={handleJoinChat}>Entrar no chat</button>
-          </div>
-          <br></br>
-          <div id="messagecontainer" className="messageContainer">
-            <div id="messageShow" className="messageShow"></div>
-            <input id="messageinput" onChange={handleMessageChange} name="messagebox" value={messageInput}></input>
-            <button id="send-message" onClick={handleSendMessage}>Send Message</button>
-          </div>
-      </div>
+    <div>
+        <div id="messagecontainer" className="messageContainer">
+          <div id="messageShow" className="messageShow"></div>
+          <input id="messageinput" name="messagebox"></input>&nbsp;
+          <button id="send-message" onClick={handleSendMessage}>Send</button>
+        </div>
+    </div>
   );
 }
 
-export default Chat;
+export default withRouter(Chat);

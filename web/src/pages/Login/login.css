@@ -1,0 +1,25 @@
+#nameselectcontainer {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    color: #fff;
+}
+
+#nameselectcontainer div {
+    position: relative;
+    left: -50%;
+}
+
+
+#nameselectcontainer div input {
+    font-size: 15px;
+}
+
+#nameselectcontainer div button {
+    background-color: rgb(42, 97, 216);
+    padding: 4px 20px;
+    border-radius: 2px;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+}
