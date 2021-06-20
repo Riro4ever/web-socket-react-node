@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "./.env" });
+
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
@@ -15,12 +17,12 @@ app.use(cors());
 
 io.on('connection', (socket) => {
     socket.on('message', message => {
-        messages.push(message);
-        console.log(messages);
+        // messages.push(message);
+        // console.log(messages);
         io.sockets.emit('received', message);
     })
 })
 
-server.listen(4444, () =>{
-    console.log("☁ Back-end started");
+server.listen(process.env.PORT, () =>{
+    console.log(`☁ Back-end started on port ${process.env.PORT}`);
 });

@@ -32,7 +32,7 @@
         let nameselectcontainer = document.getElementById("nameselectcontainer");
         document.getElementById("join").addEventListener('click', function(){
             if(!socket){
-                socket = new io("http://localhost:4444");
+                socket = new io(":4444");
                 messagecontainer.style.display = "block";
                 nameselectcontainer.style.display = "none";
             }
